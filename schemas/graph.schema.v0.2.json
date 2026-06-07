@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$comment": "Ontop Core dependency graph schema v0.2 — adds PE topology node kinds, technologyId, label, and implements edge kind",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version", "nodes", "edges"],
+  "properties": {
+    "version": { "const": "0.2" },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "label"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for this node within the graph"
+          },
+          "kind": {
+            "enum": ["service", "frontend", "backend", "database", "infrastructure", "integration"],
+            "description": "Architectural layer this node belongs to"
+          },
+          "label": {
+            "type": "string",
+            "description": "Human-readable display name for the node"
+          },
+          "technologyId": {
+            "type": "string",
+            "description": "Optional reference to a technology registry entry (e.g. Trood Tree node ID)"
+          }
+        }
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["from", "to", "kind"],
+        "properties": {
+          "from": {
+            "type": "string",
+            "description": "Source node id"
+          },
+          "to": {
+            "type": "string",
+            "description": "Target node id"
+          },
+          "kind": {
+            "enum": ["depends_on", "implements"],
+            "description": "depends_on: runtime dependency. implements: a milestone or task built this node."
+          }
+        }
+      }
+    }
+  }
+}
